@@ -1,0 +1,41 @@
+---
+- name: Install ClickHouse on Ubuntu
+  hosts: iui
+  become: yes
+  tasks:
+      - name: Install dependencies
+        apt:
+            name: "{{ item }}"
+            state: present
+        loop:
+            - apt-transport-https
+            - dirmngr
+            - ca-certificates
+
+      - name: Add ClickHouse repository key
+        apt_key:
+            keyserver: hkp://keyserver.ubuntu.com:80
+            id: E0C56BD4
+
+      - name: Add ClickHouse repository
+        apt_repository:
+            repo: "deb https://repo.clickhouse.com/deb/stable/ main/"
+            state: present
+
+      - name: Update apt package list
+        apt:
+            update_cache: yes
+
+      - name: Install ClickHouse server and client
+        apt:
+            name:
+                - clickhouse-server
+                - clickhouse-client
+            state: present
+            update_cache: yes
+
+      - name: Check ClickHouse server status
+        command: clickhouse-server
+
+      - name: Connect to ClickHouse
+        command: clickhouse-client

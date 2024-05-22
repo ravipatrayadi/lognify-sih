@@ -1,0 +1,19 @@
+---
+- name: Install NGINX
+  hosts: iui  
+  become: true  
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start NGINX service
+      service:
+        name: nginx
+        state: started
+        enabled: yes

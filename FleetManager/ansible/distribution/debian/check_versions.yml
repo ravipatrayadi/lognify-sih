@@ -1,0 +1,69 @@
+---
+- name: Check Software Versions on Ubuntu
+  hosts: iui
+  gather_facts: true
+  become: true
+  tasks:
+      - name: Check Chrome version
+        command: google-chrome --version
+        register: chrome_version
+        ignore_errors: true
+
+      - name: Check ClickHouse version
+        command: clickhouse-server --version
+        register: clickhouse_version
+        ignore_errors: true
+
+      - name: Check Docker version
+        command: docker --version
+        register: docker_version
+        ignore_errors: true
+
+      - name: Check Grafana version
+        command: grafana-server -v
+        register: grafana_version
+        ignore_errors: true
+
+      - name: Check Kubernetes version
+        command: kubectl version --client=true
+        register: kubernetes_version
+        ignore_errors: true
+
+      - name: Check MongoDB version
+        command: mongod --version
+        register: mongodb_version
+        ignore_errors: true
+
+      - name: Check MySQL version
+        command: mysql --version
+        register: mysql_version
+        ignore_errors: true
+
+      - name: Check Nginx version
+        command: nginx -v
+        register: nginx_version
+        ignore_errors: true
+
+      - name: Check PostgreSQL version
+        command: psql --version
+        register: postgresql_version
+        ignore_errors: true
+
+      - name: Check Python version
+        command: python3 --version
+        register: python_version
+        ignore_errors: true
+
+      - name: Print Software Versions
+        debug:
+            msg: |
+                Chrome: {{ chrome_version.stdout | default("Not installed") }}
+                ClickHouse: {{ clickhouse_version.stdout | default("Not installed") }}
+                Docker: {{ docker_version.stdout | default("Not installed") }}
+                Grafana: {{ grafana_version.stdout | default("Not installed") }}
+                Kubernetes: {{ kubernetes_version.stdout | default("Not installed") }}
+                MongoDB: {{ mongodb_version.stdout | default("Not installed") }}
+                MySQL: {{ mysql_version.stdout | default("Not installed") }}
+                Nginx: {{ nginx_version.stdout | default("Not installed") }}
+                PostgreSQL: {{ postgresql_version.stdout | default("Not installed") }}
+                Python: {{ python_version.stdout | default("Not installed") }}

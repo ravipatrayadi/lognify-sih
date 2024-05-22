@@ -1,0 +1,22 @@
+---
+- name: Install Google Chrome on Debian
+  hosts: iui
+  become: true
+  gather_facts: true
+
+  tasks:
+      - name: Add Google Chrome repository key
+        apt_key:
+            url: https://dl.google.com/linux/linux_signing_key.pub
+            state: present
+
+      - name: Add Google Chrome APT repository
+        apt_repository:
+            repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+            state: present
+            update_cache: yes
+
+      - name: Install Google Chrome
+        apt:
+            name: google-chrome-stable
+            state: present

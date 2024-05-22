@@ -1,0 +1,21 @@
+---
+- name: Update packages
+  hosts: windows_vm
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Copy PowerShell script to target machine
+        win_copy:
+            src: update_pkg.ps1
+            dest: C:\update_pkg.ps1
+
+      - name: Execute PowerShell script
+        win_shell: |
+            Set-ExecutionPolicy Bypass -Scope Process -Force
+            C:\update_pkg.ps1
+        register: script_output
+
+      - name: Print script output
+        debug:
+            msg: "{{ script_output.stdout_lines }}"

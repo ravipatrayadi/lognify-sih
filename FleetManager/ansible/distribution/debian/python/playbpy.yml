@@ -1,0 +1,16 @@
+---
+- name: Install Python
+  hosts: iui
+  become: true  
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Python
+      apt:
+        name: python
+        state: present
+
+//ansible-playbook inventory.ini playbpy.yml 

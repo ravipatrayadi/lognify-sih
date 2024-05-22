@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh 'pip3 install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Run script') {
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+            }
+            steps {
+                script {
+                    sh 'python3 getVMInstances_AWS.py'
+                    sh 'cat aws_inventory.ini'
+                }
+            }
+        }
+    }
+}

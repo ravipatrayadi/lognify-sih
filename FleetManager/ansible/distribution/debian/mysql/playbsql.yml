@@ -1,0 +1,20 @@
+---
+- name: Install MySQL
+  hosts: iui  # Replace with your target host or group
+  become: true  # Run tasks with elevated privileges (sudo)
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Start MySQL service
+      service:
+        name: mysql
+        state: started
+        enabled: yes

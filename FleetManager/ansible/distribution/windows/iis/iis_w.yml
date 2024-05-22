@@ -1,0 +1,10 @@
+- name: Install IIS on Windows
+  hosts: windows_vm
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Install IIS
+        win_chocolatey:
+            name: iis
+            state: present

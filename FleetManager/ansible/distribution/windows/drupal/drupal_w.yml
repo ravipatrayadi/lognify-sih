@@ -1,0 +1,16 @@
+---
+- name: Install Drupal on Windows
+  hosts: windows_vm
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Copy PowerShell script to target machine
+        win_copy:
+            src: drupal.ps1
+            dest: C:\drupal.ps1
+
+      - name: Execute PowerShell script
+        win_shell: |
+            Set-ExecutionPolicy Bypass -Scope Process -Force
+            C:\drupal.ps1

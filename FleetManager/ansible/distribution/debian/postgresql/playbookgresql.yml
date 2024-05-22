@@ -1,0 +1,18 @@
+---
+- name: Install PostgreSQL
+  hosts: iui
+  become: true 
+
+  tasks:
+    - name: Install PostgreSQL and dependencies
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+        state: present
+
+    - name: Start and enable PostgreSQL service
+      systemd:
+        name: postgresql
+        state: started
+        enabled: yes

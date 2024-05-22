@@ -1,0 +1,42 @@
+sources:
+  logs:
+    type : demo_logs
+    format: apache_common
+  logs_apache:
+    type: demo_logs
+    format: apache_error
+  bsd_syslog:
+    type: demo_logs
+    format: bsd_syslog
+  json:
+    type: demo_logs
+    format: json
+  syslog:
+    type: demo_logs
+    format: syslog
+#   metrics:
+#     type : host_metrics
+
+# transforms:
+#   transforms_metrics_aggregate:
+#     type: aggregate
+#     inputs:
+#       - metrics
+#     interval_ms: 10000
+
+
+sinks:
+  kafka_metrics:
+    type : kafka
+    inputs : ["logs", "logs_apache"]
+    bootstrap_servers : "13.233.224.58:9092"
+    encoding:
+      codec : "json"
+    topic : "apache"
+# sinks:
+#   console:
+#     type: console
+#     inputs:
+#       - syslog
+#     encoding:
+#       codec: json

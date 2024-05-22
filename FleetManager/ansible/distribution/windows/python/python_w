@@ -1,0 +1,15 @@
+- name: Install Python on Windows
+  hosts: windows_vm # Replace with your target Windows host or group
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Install Chocolatey
+        win_shell: |
+            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+      - name: Install Python via Chocolatey
+        win_chocolatey:
+            name: python
+            state: present
+            version: "3.9.7" # Specify the desired Python version

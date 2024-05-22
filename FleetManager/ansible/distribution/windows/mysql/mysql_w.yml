@@ -1,0 +1,10 @@
+- name: Install MySQL on Windows
+  hosts: windows_vm # Replace with your target Windows host or group
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Install MySQL via Chocolatey
+        win_chocolatey:
+            name: mysql
+            state: present

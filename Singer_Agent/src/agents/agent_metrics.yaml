@@ -1,0 +1,21 @@
+sources:
+  metrics:
+    type : host_metrics
+
+transforms:
+  transforms_metrics_aggregate:
+    type: aggregate
+    inputs:
+      - metrics
+    interval_ms: 10000
+
+
+sinks:
+  kafka_metrics:
+    type : kafka
+    inputs:
+    - "transforms_metrics_aggregate"
+    bootstrap_servers : "13.233.224.58:9092"
+    encoding:
+      codec : "json"
+    topic : "metrics"

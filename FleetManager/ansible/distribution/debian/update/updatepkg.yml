@@ -1,0 +1,16 @@
+---
+- name: Update and Upgrade Packages on Ubuntu
+  hosts: iui # Replace with the appropriate group or host
+  become: yes
+
+  tasks:
+      - name: Update package cache
+        apt:
+            update_cache: yes
+
+      - name: Upgrade all packages
+        shell: apt-get upgrade
+
+      - name: Clean up unused packages
+        apt:
+            autoremove: yes

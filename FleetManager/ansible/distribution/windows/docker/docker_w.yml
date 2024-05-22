@@ -1,0 +1,15 @@
+- name: Install Docker on Windows
+  hosts: windows_vm
+  gather_facts: false
+  vars:
+    ansible_winrm_server_cert_validation: ignore
+  tasks:
+    - name: Copy PowerShell script to target machine
+      win_copy:
+        src: docker.ps1
+        dest: C:\docker.ps1
+
+    - name: Execute PowerShell script
+      win_shell: |
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        C:\docker.ps1

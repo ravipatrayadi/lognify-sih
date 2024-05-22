@@ -1,0 +1,75 @@
+{
+    "clickhouse": {
+        "hosts": [
+            [
+                "3.111.169.63"
+            ]
+        ],
+        "port": 9000,
+        "username": "default",
+        "password": "Moon9360@",
+        "db": "default"
+    },
+    "kafka": {
+        "brokers": "13.233.224.58:9092"
+    },
+    "task": null,
+    "Tasks": [
+        {
+            "name": "A_DB",
+            "topic": "metrics_a",
+            "earliest": true,
+            "consumerGroup": "metrics",
+            "tableName": "metrics_a",
+            "parser": "fastjson",
+            "flushInterval": 15,
+            "autoSchema" : true,
+            "dynamicSchema": {
+                "enable": true,
+                "maxDims": 1024
+            }
+        },
+        {
+            "name": "B_DB",
+            "topic": "bsd_syslog",
+            "earliest": true,
+            "consumerGroup": "logs",
+            "tableName": "logs",
+            "parser": "fastjson",
+            "flushInterval": 15,
+            "autoSchema" : true,
+            "dynamicSchema": {
+                "enable": true,
+                "maxDims": 1024
+            }
+        },
+        {
+            "name": "C_DB",
+            "topic": "http",
+            "earliest": true,
+            "consumerGroup": "logs",
+            "tableName": "logs",
+            "parser": "fastjson",
+            "flushInterval": 15,
+            "autoSchema" : true,
+            "dynamicSchema": {
+                "enable": true,
+                "maxDims": 1024
+            }
+        },
+        {
+            "name": "D_DB",
+            "topic": "apache",
+            "earliest": true,
+            "consumerGroup": "logs",
+            "tableName": "logs",
+            "parser": "fastjson",
+            "flushInterval": 15,
+            "autoSchema" : true,
+            "dynamicSchema": {
+                "enable": true,
+                "maxDims": 1024
+            }
+        }
+    ]
+}

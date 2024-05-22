@@ -1,0 +1,72 @@
+- name: Check Software Versions on Windows
+  hosts: windows_vm # Replace with your actual target Windows host or group
+  gather_facts: true
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+
+  tasks:
+      - name: Check IIS Version
+        win_shell: |
+            Get-WindowsFeature -Name Web-Server | Select-Object -Property DisplayName, InstallState, Version
+        register: iis_version
+
+      - name: Check Apache Version
+        win_shell: |
+            (Get-Command "C:\Apache24\bin\httpd.exe").FileVersionInfo.ProductVersion
+        register: apache_version
+        ignore_errors: yes
+
+      - name: Check Apache2 Version
+        win_shell: |
+            (Get-Command "C:\Apache22\bin\httpd.exe").FileVersionInfo.ProductVersion
+        register: apache2_version
+        ignore_errors: yes
+
+      - name: Check Nginx Version
+        win_shell: |
+            (Get-Command "C:\nginx\nginx.exe").FileVersionInfo.ProductVersion
+        register: nginx_version
+        ignore_errors: yes
+
+      - name: Check Drupal Version
+        win_shell: |
+            Get-Content "C:\xampp\htdocs\drupal\core\lib\Drupal.php" | Select-String "const VERSION ="
+        register: drupal_version
+        ignore_errors: yes
+
+      - name: Check Chrome Version
+        win_shell: |
+            (Get-Item "C:\Program Files\Google\Chrome\Application\chrome.exe").VersionInfo.ProductVersion
+        register: chrome_version
+        ignore_errors: yes
+
+      - name: Check Edge Version
+        win_shell: |
+            (Get-Item "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.ProductVersion
+        register: edge_version
+        ignore_errors: yes
+
+      - name: Check Python Version
+        win_shell: |
+            python --version
+        register: python_version
+        ignore_errors: yes
+
+      - name: Check MySQL Version
+        win_shell: |
+            Get-ItemProperty HKLM:\SOFTWARE\MySQL\Server | Select-Object -Property DisplayName, DisplayVersion
+        register: mysql_version
+        ignore_errors: yes
+
+      - name: Display Software Versions
+        debug:
+            msg: |
+                IIS Version: {{ iis_version.stdout }}
+                Apache Version: {{ apache_version.stdout }}
+                Apache2 Version: {{ apache2_version.stdout }}
+                Nginx Version: {{ nginx_version.stdout }}
+                Drupal Version: {{ drupal_version.stdout }}
+                Chrome Version: {{ chrome_version.stdout }}
+                Edge Version: {{ edge_version.stdout }}
+                Python Version: {{ python_version.stdout }}
+                MySQL Version: {{ mysql_version.stdout }}

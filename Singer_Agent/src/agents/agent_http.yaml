@@ -1,0 +1,14 @@
+sources:
+  json:
+    type: demo_logs
+    format: json
+
+sinks:
+  kafka_metrics:
+    type : kafka
+    inputs : 
+    - "json"
+    bootstrap_servers : "13.233.224.58:9092"
+    encoding:
+      codec : "json"
+    topic : "http"

@@ -1,0 +1,31 @@
+sources:
+  syslog:
+    type: demo_logs
+    format: syslog
+#   metrics:
+#     type : host_metrics
+
+# transforms:
+#   transforms_metrics_aggregate:
+#     type: aggregate
+#     inputs:
+#       - metrics
+#     interval_ms: 10000
+
+
+sinks:
+  kafka_metrics:
+    type : kafka
+    inputs : 
+    - "syslog"
+    bootstrap_servers : "13.233.224.58:9092"
+    encoding:
+      codec : "syslog"
+    topic : "apache"
+# sinks:
+#   console:
+#     type: console
+#     inputs:
+#       - syslog
+#     encoding:
+#       codec: json

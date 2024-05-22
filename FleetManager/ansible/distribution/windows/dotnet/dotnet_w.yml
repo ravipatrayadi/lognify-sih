@@ -1,0 +1,15 @@
+- name: Create wsmprovhost.exe.config files on Windows
+  hosts: windows_vm # Replace with your target Windows host or group
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Create wsmprovhost.exe.config in System32
+        win_template:
+            src: templates/wsmprovhost.exe.config.j2
+            dest: C:\Windows\System32\wsmprovhost.exe.config
+
+      - name: Create wsmprovhost.exe.config in SysWOW64
+        win_template:
+            src: templates/wsmprovhost.exe.config.j2
+            dest: C:\Windows\SysWOW64\wsmprovhost.exe.config

@@ -1,0 +1,10 @@
+- name: Install Nginx on Windows
+  hosts: windows_vm
+  gather_facts: false
+  vars:
+      ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: Install Nginx
+        win_chocolatey:
+            name: nginx
+            state: present

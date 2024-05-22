@@ -1,0 +1,22 @@
+---
+- name: Install Grafana
+  hosts: your_grafana_servers
+  become: true
+
+  tasks:
+      - name: Add Grafana APT repository
+        apt_repository:
+            repo: deb https://packages.grafana.com/oss/deb stable main
+            state: present
+            update_cache: yes
+
+      - name: Install Grafana
+        apt:
+            name: grafana
+            state: present
+
+      - name: Start Grafana service
+        service:
+            name: grafana-server
+            state: started
+            enabled: yes

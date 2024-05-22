@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    environment {
+        KAFKA_HOME = '/path/to/kafka'  
+        TOPIC_NAME = 'your_topic_name' 
+        MAX_AGE_SECONDS = 86400          
+    }
+
+    stages {
+        stage('Remove Records from Kafka Topic') {
+            steps {
+                script {
+                    def currentTimestamp = sh(script: 'date +%s', returnStdout: true).trim().toLong()
+
+                    def earliestRecordTimestamp = sh(
+                        script: "${KAFKA_HOME}/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic ${TOPIC_NAME} --time -1",
+                        returnStdout: true
+                    ).trim().toLong()
+
+                    def ageInSeconds = currentTimestamp - earliestRecordTimestamp
+
+                    if (ageInSeconds >= MAX_AGE_SECONDS) {
+                        echo "The topic is older than 24 hours. Removing all records..."
+
+                        sh("${KAFKA_HOME}/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic ${TOPIC_NAME} --from-beginning --timeout-ms 1000 --property print.timestamp=true | awk '{if (\$1 < ${currentTimestamp} - ${MAX_AGE_SECONDS} * 1000) print \$0}' | ${KAFKA_HOME}/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic ${TOPIC_NAME} --property parse.key=true --property key.separator=:")
+                    } else {
+                        echo "The topic is within the 24-hour limit. No action needed."
+                    }
+                }
+            }
+        }
+    }
+}
